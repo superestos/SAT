@@ -21,18 +21,32 @@ TEST(Assignment, AssignmentTest) {
     ASSERT_EQ(l4.eval(), false);
     ASSERT_EQ(l5.eval(), true);
 
-    Conjunction c0{&u};
-    Conjunction c1{&f, &t};
-    Conjunction c2{&t, &f};
-    Conjunction c3{&u, &f};
-    Conjunction c4{l3, l4};
-    Conjunction c5{&u, &t, &f};
+    Disjunction d0{&u};
+    Disjunction d1{&f, &t};
+    Disjunction d2{&t, &f};
+    Disjunction d3{&u, &f};
+    Disjunction d4{l3, l4};
+    Disjunction d5{&u, &t, &f};
+    Disjunction d6{&t};
+
+    ASSERT_EQ(d0.eval(), false);
+    ASSERT_EQ(d1.eval(), true);
+    ASSERT_EQ(d2.eval(), true);
+    ASSERT_EQ(d3.eval(), false);
+    ASSERT_EQ(d4.eval(), false);
+    ASSERT_EQ(d5.eval(), true);
+    ASSERT_EQ(d6.eval(), true);
+
+    CNF c0{d0};
+    CNF c1{d6};
+    CNF c2{d1, d2};
+    CNF c3{d2, d3};
+    CNF c4{d2, d5, d6};
 
     ASSERT_EQ(c0.eval(), false);
     ASSERT_EQ(c1.eval(), true);
     ASSERT_EQ(c2.eval(), true);
     ASSERT_EQ(c3.eval(), false);
-    ASSERT_EQ(c4.eval(), false);
-    ASSERT_EQ(c5.eval(), true);
+    ASSERT_EQ(c4.eval(), true);
 }
 

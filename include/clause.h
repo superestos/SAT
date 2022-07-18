@@ -38,9 +38,9 @@ private:
     bool neg;
 };
 
-class Conjunction {
+class Disjunction {
 public:
-    Conjunction(std::initializer_list<Literal> list): literals{list} {}
+    Disjunction(std::initializer_list<Literal> list): literals{list} {}
 
     bool eval() {
         for (Literal &literal: literals) {
@@ -58,8 +58,10 @@ private:
 
 class CNF {
 public:
+    CNF(std::initializer_list<Disjunction> list): formula{list} {}
+
     bool eval() {
-        for (Conjunction &conjunction: formula) {
+        for (Disjunction &conjunction: formula) {
             if (!conjunction.eval()) {
                 return false;
             }
@@ -69,5 +71,5 @@ public:
     }
 
 private:
-    std::vector<Conjunction> formula;
+    std::vector<Disjunction> formula;
 };
