@@ -1,4 +1,5 @@
 #include <vector>
+#include <initializer_list>
 
 class Variable {
 public:
@@ -39,6 +40,8 @@ private:
 
 class Conjunction {
 public:
+    Conjunction(std::initializer_list<Literal> list): literals{list} {}
+
     bool eval() {
         for (Literal &literal: literals) {
             if (literal.eval()) {
