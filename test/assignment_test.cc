@@ -50,3 +50,17 @@ TEST(Assignment, AssignmentTest) {
     ASSERT_EQ(c4.eval(), true);
 }
 
+TEST(Operator, AssignmentTest) {
+    Variable t = true;
+    Variable f = false;
+
+    Literal ltrue = +t;
+    Literal lntrue = -t;
+    Literal lfalse = +f;
+    Literal lnfalse = -f;
+
+    ASSERT_EQ(ltrue.eval(), true);
+    ASSERT_EQ(lntrue.eval(), false);
+    ASSERT_EQ(lfalse.eval(), false);
+    ASSERT_EQ(lnfalse.eval(), true);
+}
