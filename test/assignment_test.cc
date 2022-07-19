@@ -55,17 +55,17 @@ TEST(LiteralOperator, AssignmentTest) {
     Variable f = false;
 
     Literal ltrue = +t;
-    Literal lntrue = ~t;
+    Literal lntrue = !t;
     Literal lfalse = +f;
-    Literal lnfalse = ~f;
+    Literal lnfalse = !f;
 
     ASSERT_EQ(ltrue.eval(), true);
     ASSERT_EQ(lntrue.eval(), false);
     ASSERT_EQ(lfalse.eval(), false);
     ASSERT_EQ(lnfalse.eval(), true);
 
-    ASSERT_EQ((~lntrue).eval(), true);
-    ASSERT_EQ((~lnfalse).eval(), false);
+    ASSERT_EQ((!lntrue).eval(), true);
+    ASSERT_EQ((!lnfalse).eval(), false);
 }
 
 TEST(DisjunctionOperator, AssignmentTest) {
@@ -79,10 +79,10 @@ TEST(DisjunctionOperator, AssignmentTest) {
     ASSERT_EQ(d0.eval(), true);
     ASSERT_EQ(d1.eval(), false);
 
-    ASSERT_EQ((~d0).eval(), false);
-    ASSERT_EQ((~d1).eval(), true);
+    ASSERT_EQ((!d0).eval(), false);
+    ASSERT_EQ((!d1).eval(), true);
     ASSERT_EQ((d1 | d0).eval(), true);
-    ASSERT_EQ((~(d1 | d0)).eval(), false);
+    ASSERT_EQ((!(d1 | d0)).eval(), false);
     ASSERT_EQ((d0 & d1).eval(), false);
 }
 

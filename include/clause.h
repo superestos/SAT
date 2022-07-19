@@ -25,7 +25,7 @@ friend class Literal;
     }
 
     Literal operator+();
-    Literal operator~();
+    Literal operator!();
 
 private:
     bool defined;
@@ -40,7 +40,7 @@ public:
         return var->defined? (neg ^ var->value): false;
     }
 
-    Literal operator~();
+    Literal operator!();
     Disjunction operator|(Literal o);
 
 private:
@@ -69,7 +69,7 @@ public:
 
     Disjunction operator|(Disjunction o);
     CNF operator&(Disjunction o);
-    CNF operator~();
+    CNF operator!();
 
 private:
     std::vector<Literal> literals;
@@ -102,11 +102,11 @@ Literal Variable::operator+() {
     return Literal(this);
 }
 
-Literal Variable::operator~() {
+Literal Variable::operator!() {
     return Literal(this, true);
 }
 
-Literal Literal::operator~() {
+Literal Literal::operator!() {
     return Literal(this->var, !this->neg);
 }
 
@@ -120,10 +120,10 @@ Disjunction Disjunction::operator|(Disjunction o) {
     return result;
 }
 
-CNF Disjunction::operator~() {
+CNF Disjunction::operator!() {
     std::vector<Disjunction> negate_list;
     for (auto &literal: literals) {
-        negate_list.emplace_back(~literal);
+        negate_list.emplace_back(!literal);
     }
 
     return CNF(negate_list);
