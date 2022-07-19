@@ -13,7 +13,7 @@ friend class Literal;
         set(value);
     }
 
-    Variable() {}
+    Variable(): defined{false}, value{false} {}
 
     void set(bool value) {
         this->value = value;
@@ -28,8 +28,8 @@ friend class Literal;
     Literal operator-();
 
 private:
-    bool defined{false};
-    bool value{false};
+    bool defined;
+    bool value;
 };
 
 class Literal {
@@ -80,8 +80,8 @@ public:
     CNF(std::initializer_list<Disjunction> list): formula{list} {}
 
     bool eval() {
-        for (Disjunction &conjunction: formula) {
-            if (!conjunction.eval()) {
+        for (Disjunction &disjunction: formula) {
+            if (!disjunction.eval()) {
                 return false;
             }
         }
