@@ -140,9 +140,9 @@ TEST(CNFOr, AssignmentTest) {
     for (int i = 0; i < 4; i++) {
         v[i].set(false);
     }
-    CNF d0 = Disjunction(+v[0]) & Disjunction(+v[1]);
-    CNF d1 = Disjunction(+v[2]) & Disjunction(+v[3]);
-    CNF d = d0 | d1;
+    CNF c0 = Disjunction(+v[0]) & Disjunction(+v[1]);
+    CNF c1 = Disjunction(+v[2]) & Disjunction(+v[3]);
+    CNF d = c0 | c1;
 
     ASSERT_EQ(d.eval(), false);
     v[0].set(true);
@@ -155,4 +155,29 @@ TEST(CNFOr, AssignmentTest) {
     ASSERT_EQ(d.eval(), false);
     v[3].set(true);
     ASSERT_EQ(d.eval(), true);
+}
+
+TEST(CNFNot, AssignmentTest) {
+    Variable v[4];
+    for (int i = 0; i < 4; i++) {
+        v[i].set(false);
+    }
+    Disjunction d0 = +v[0] | +v[1] | !v[2];
+    Disjunction d1 = +v[1] | +v[2] | +v[3];
+    CNF c = !(d0 & d1);
+
+    ASSERT_EQ(c.eval(), true);
+    v[2].set(true);
+    ASSERT_EQ(c.eval(), true);
+    v[0].set(true);
+    ASSERT_EQ(c.eval(), false);
+    v[2].set(false);
+    ASSERT_EQ(c.eval(), true);
+    v[3].set(true);
+    ASSERT_EQ(c.eval(), false);
+    v[3].set(false);
+    v[0].set(false);
+    ASSERT_EQ(c.eval(), true);
+    v[1].set(true);
+    ASSERT_EQ(c.eval(), false);
 }

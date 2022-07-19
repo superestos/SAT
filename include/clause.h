@@ -96,6 +96,7 @@ public:
 
     CNF operator&(CNF o);
     CNF operator|(CNF o);
+    CNF operator!();
 
 private:
     std::vector<Disjunction> formula;
@@ -145,4 +146,13 @@ CNF CNF::operator|(CNF o) {
     }
 
     return CNF(list);
+}
+
+CNF CNF::operator!() {
+    CNF result = !formula[0];
+    for (std::size_t i = 1; i < formula.size(); i++) {
+        result = result | !formula[i];
+    }
+
+    return result;
 }
