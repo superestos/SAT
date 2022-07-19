@@ -181,3 +181,28 @@ TEST(CNFNot, AssignmentTest) {
     v[1].set(true);
     ASSERT_EQ(c.eval(), false);
 }
+
+TEST(CNFDoubleNegate, AssignmentTest) {
+    Variable v[4];
+    for (int i = 0; i < 4; i++) {
+        v[i].set(false);
+    }
+    Disjunction d0 = +v[0] | +v[1] | !v[2];
+    Disjunction d1 = +v[1] | +v[2] | +v[3];
+    CNF c = !(!(d0 & d1));
+
+    ASSERT_EQ(c.eval(), false);
+    v[2].set(true);
+    ASSERT_EQ(c.eval(), false);
+    v[0].set(true);
+    ASSERT_EQ(c.eval(), true);
+    v[2].set(false);
+    ASSERT_EQ(c.eval(), false);
+    v[3].set(true);
+    ASSERT_EQ(c.eval(), true);
+    v[3].set(false);
+    v[0].set(false);
+    ASSERT_EQ(c.eval(), false);
+    v[1].set(true);
+    ASSERT_EQ(c.eval(), true);
+}
