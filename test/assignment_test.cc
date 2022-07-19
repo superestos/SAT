@@ -68,6 +68,24 @@ TEST(LiteralOperator, AssignmentTest) {
     ASSERT_EQ((~lnfalse).eval(), false);
 }
 
+TEST(DisjunctionOperator, AssignmentTest) {
+    Variable vt = true;
+    Variable vf = false;
+    Literal t = &vt;
+    Literal f = &vf;
+
+    Disjunction d0 = t | f;
+    Disjunction d1 = f | f;
+    ASSERT_EQ(d0.eval(), true);
+    ASSERT_EQ(d1.eval(), false);
+
+    ASSERT_EQ((~d0).eval(), false);
+    ASSERT_EQ((~d1).eval(), true);
+    ASSERT_EQ((d1 | d0).eval(), true);
+    ASSERT_EQ((~(d1 | d0)).eval(), false);
+    ASSERT_EQ((d0 & d1).eval(), false);
+}
+
 TEST(SetValue, AssignmentTest) {
     Variable v[3];
     Literal l0(&v[0]);

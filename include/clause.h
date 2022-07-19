@@ -54,6 +54,7 @@ public:
         literals.emplace_back(literal);
     }
 
+    Disjunction(std::vector<Literal> list): literals{list} {}
     Disjunction(std::initializer_list<Literal> list): literals{list} {}
 
     bool eval() {
@@ -66,7 +67,9 @@ public:
         return false;
     }
 
+    Disjunction operator|(Disjunction o);
     CNF operator&(Disjunction o);
+    CNF operator~();
 
 private:
     std::vector<Literal> literals;
@@ -78,6 +81,7 @@ public:
         formula.emplace_back(disjunction);
     }
 
+    CNF(std::vector<Disjunction> list): formula{list} {}
     CNF(std::initializer_list<Disjunction> list): formula{list} {}
 
     bool eval() {
@@ -108,6 +112,21 @@ Literal Literal::operator~() {
 
 Disjunction Literal::operator|(Literal o) {
     return Disjunction({*this, o});
+}
+
+Disjunction Disjunction::operator|(Disjunction o) {
+    Disjunction result = o;
+    result.literals.insert(result.literals.end(), o.literals.begin(), o.literals.end());
+    return result;
+}
+
+CNF Disjunction::operator~() {
+    std::vector<Disjunction> negate_list;
+    for (auto &literal: literals) {
+        negate_list.emplace_back(~literal);
+    }
+
+    return CNF(negate_list);
 }
 
 CNF Disjunction::operator&(Disjunction o) {
