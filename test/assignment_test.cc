@@ -50,19 +50,22 @@ TEST(Assignment, AssignmentTest) {
     ASSERT_EQ(c4.eval(), true);
 }
 
-TEST(Operator, AssignmentTest) {
+TEST(LiteralOperator, AssignmentTest) {
     Variable t = true;
     Variable f = false;
 
     Literal ltrue = +t;
-    Literal lntrue = -t;
+    Literal lntrue = ~t;
     Literal lfalse = +f;
-    Literal lnfalse = -f;
+    Literal lnfalse = ~f;
 
     ASSERT_EQ(ltrue.eval(), true);
     ASSERT_EQ(lntrue.eval(), false);
     ASSERT_EQ(lfalse.eval(), false);
     ASSERT_EQ(lnfalse.eval(), true);
+
+    ASSERT_EQ((~lntrue).eval(), true);
+    ASSERT_EQ((~lnfalse).eval(), false);
 }
 
 TEST(SetValue, AssignmentTest) {
@@ -99,7 +102,7 @@ TEST(SetValue, AssignmentTest) {
     v[1].undefine();
 
     Disjunction d({&v[0], &v[1], &v[2]});
-    CNF c = Disjunction(+v[0]) & Disjunction(+v[1]);
+    CNF c = Disjunction(&v[0]) & Disjunction(&v[1]);
     ASSERT_EQ(d.eval(), false);
     ASSERT_EQ(c.eval(), false);
 

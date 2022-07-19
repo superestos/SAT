@@ -25,7 +25,7 @@ friend class Literal;
     }
 
     Literal operator+();
-    Literal operator-();
+    Literal operator~();
 
 private:
     bool defined;
@@ -40,6 +40,7 @@ public:
         return var->defined? (neg ^ var->value): false;
     }
 
+    Literal operator~();
     Disjunction operator|(Literal o);
 
 private:
@@ -97,8 +98,12 @@ Literal Variable::operator+() {
     return Literal(this);
 }
 
-Literal Variable::operator-() {
+Literal Variable::operator~() {
     return Literal(this, true);
+}
+
+Literal Literal::operator~() {
+    return Literal(this->var, !this->neg);
 }
 
 Disjunction Literal::operator|(Literal o) {
