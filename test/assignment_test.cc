@@ -50,42 +50,6 @@ TEST(Assignment, AssignmentTest) {
     ASSERT_EQ(c4.eval(), true);
 }
 
-TEST(LiteralOperator, AssignmentTest) {
-    Variable t = true;
-    Variable f = false;
-
-    Literal ltrue = +t;
-    Literal lntrue = !t;
-    Literal lfalse = +f;
-    Literal lnfalse = !f;
-
-    ASSERT_EQ(ltrue.eval(), true);
-    ASSERT_EQ(lntrue.eval(), false);
-    ASSERT_EQ(lfalse.eval(), false);
-    ASSERT_EQ(lnfalse.eval(), true);
-
-    ASSERT_EQ((!lntrue).eval(), true);
-    ASSERT_EQ((!lnfalse).eval(), false);
-}
-
-TEST(DisjunctionOperator, AssignmentTest) {
-    Variable vt = true;
-    Variable vf = false;
-    Literal t = &vt;
-    Literal f = &vf;
-
-    Disjunction d0 = t | f;
-    Disjunction d1 = f | f;
-    ASSERT_EQ(d0.eval(), true);
-    ASSERT_EQ(d1.eval(), false);
-
-    ASSERT_EQ((!d0).eval(), false);
-    ASSERT_EQ((!d1).eval(), true);
-    ASSERT_EQ((d1 | d0).eval(), true);
-    ASSERT_EQ((!(d1 | d0)).eval(), false);
-    ASSERT_EQ((d0 & d1).eval(), false);
-}
-
 TEST(SetValue, AssignmentTest) {
     Variable v[3];
     Literal l0(&v[0]);
@@ -131,4 +95,64 @@ TEST(SetValue, AssignmentTest) {
     v[1].set(true);
     ASSERT_EQ(d.eval(), true);
     ASSERT_EQ(c.eval(), true);
+}
+
+TEST(LiteralOperator, AssignmentTest) {
+    Variable t = true;
+    Variable f = false;
+
+    Literal ltrue = +t;
+    Literal lntrue = !t;
+    Literal lfalse = +f;
+    Literal lnfalse = !f;
+
+    ASSERT_EQ(ltrue.eval(), true);
+    ASSERT_EQ(lntrue.eval(), false);
+    ASSERT_EQ(lfalse.eval(), false);
+    ASSERT_EQ(lnfalse.eval(), true);
+
+    ASSERT_EQ((!lntrue).eval(), true);
+    ASSERT_EQ((!lnfalse).eval(), false);
+}
+
+TEST(DisjunctionOperator, AssignmentTest) {
+    Variable vt = true;
+    Variable vf = false;
+    Literal t = &vt;
+    Literal f = &vf;
+
+    Disjunction d0 = t | f;
+    Disjunction d1 = f | f;
+    ASSERT_EQ(d0.eval(), true);
+    ASSERT_EQ(d1.eval(), false);
+
+    ASSERT_EQ((!d0).eval(), false);
+    ASSERT_EQ((!d1).eval(), true);
+    ASSERT_EQ((d1 | d0).eval(), true);
+    ASSERT_EQ((d0 | d0).eval(), true);
+    ASSERT_EQ((d1 | d1).eval(), false);
+    ASSERT_EQ((!(d1 | d0)).eval(), false);
+    ASSERT_EQ((d0 & d1).eval(), false);
+}
+
+TEST(CNFOr, AssignmentTest) {
+    Variable v[4];
+    for (int i = 0; i < 4; i++) {
+        v[i].set(false);
+    }
+    CNF d0 = Disjunction(+v[0]) & Disjunction(+v[1]);
+    CNF d1 = Disjunction(+v[2]) & Disjunction(+v[3]);
+    CNF d = d0 | d1;
+
+    ASSERT_EQ(d.eval(), false);
+    v[0].set(true);
+    ASSERT_EQ(d.eval(), false);
+    v[2].set(true);
+    ASSERT_EQ(d.eval(), false);
+    v[1].set(true);
+    ASSERT_EQ(d.eval(), true);
+    v[0].set(false);
+    ASSERT_EQ(d.eval(), false);
+    v[3].set(true);
+    ASSERT_EQ(d.eval(), true);
 }

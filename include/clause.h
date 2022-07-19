@@ -94,6 +94,9 @@ public:
         return true;
     }
 
+    CNF operator&(CNF o);
+    CNF operator|(CNF o);
+
 private:
     std::vector<Disjunction> formula;
 };
@@ -116,7 +119,7 @@ Disjunction Literal::operator|(Literal o) {
 
 Disjunction Disjunction::operator|(Disjunction o) {
     Disjunction result = o;
-    result.literals.insert(result.literals.end(), o.literals.begin(), o.literals.end());
+    result.literals.insert(result.literals.cend(), literals.begin(), literals.end());
     return result;
 }
 
@@ -131,4 +134,15 @@ CNF Disjunction::operator!() {
 
 CNF Disjunction::operator&(Disjunction o) {
     return CNF({*this, o});
+}
+
+CNF CNF::operator|(CNF o) {
+    std::vector<Disjunction> list;
+    for (Disjunction d1: o.formula) {
+        for (Disjunction d2: this->formula) {
+            list.emplace_back(d1 | d2);
+        }
+    }
+
+    return CNF(list);
 }
